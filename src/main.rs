@@ -54,8 +54,11 @@ fn main() -> Result<()> {
 }
 
 fn remove_emojis(content: &str) -> String {
-    let re = Regex::new(r"\p{Emoji_Presentation}").unwrap();
-    re.replace_all(content, "").to_string()
+    let re_with_spaces = Regex::new(r" \p{Emoji}+ ").unwrap();
+    let temp = re_with_spaces.replace_all(content, " ");
+
+    let re_emoji = Regex::new(r"\p{Emoji}+").unwrap();
+    re_emoji.replace_all(&temp, "").to_string()
 }
 
 fn process_file(args: &Cli) -> Result<()> {
